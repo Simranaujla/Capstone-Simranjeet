@@ -5,7 +5,7 @@ require_once '../config/database.php';
 //Restrict access to Employer accounts
 
 if (!isset($_SESSION['user_id'])  || $_SESSION['role_id'] != 1){
-    header("Location :dashboard.php");
+    header("Location: dashboard.php");
     exit();
 }
 
@@ -16,7 +16,7 @@ user_id,
 full_name,
 email,
 phone,
-account_status,
+account_status
 FROM users
 WHERE role_id = 2
 ORDER BY full_name";
@@ -58,7 +58,7 @@ $result = mysqli_query($conn,$sql);
                 <td><?php echo $row['phone']; ?></td>
                 <td><?php echo $row['account_status']; ?></td>
                 <td>
-                    <a href = "edit_employee.php?id<?php echo $row['user_id']; ?>">Edit</a>
+                    <a href = "edit_employee.php?id=<?php echo $row['user_id']; ?>">Edit</a>
                 </td>
             </tr>
 

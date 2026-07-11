@@ -60,7 +60,7 @@ $result = mysqli_query($conn, $sql);
                    <td><?php echo $row['total_hours']; ?></td>
                    <td><?php echo $row['approval_status']; ?></td>
                    <td>
-                      // Confirm approval status update befpre submitting
+                      
                       <a href="update_status.php?id=<?php echo $row['record_id']; ?>&status=Approved" onclick = "return confirm('Approve this work record?')" >Approve</a>
                       <a href ="update_status.php?id=<?php echo $row['record_id']; ?>&status=Rejected" onclick = "return conform('Reject this work record ?')" >Reject </a>
                    </td> 
