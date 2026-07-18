@@ -37,34 +37,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
 
-
-    //Update emloyee profile users
-    $update_sql = "UPDATE users
-    SET full_name = ?,
-    email = ?,
-    phone = ?
-    WHERE user_id = ?";
-
-    $update_stmt = mysqli_prepare($conn,$update_sql);
-
-    mysqli_stmt_bind_param(
-        $update_stmt,
-        "sssi",
-        $full_name,
-        $email,
-        $phone,
-        $user_id
-    );
-
-
-    if(mysqli_stmt_execute($update_stmt)){
-        $message = "Employee profile updated successfully." ;
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $user = mysqli_fetch_assoc($result);
+    //Validate required employee fields
+    if (empty($full_name) || empty($email) || empty($phone)){
+        $message = "All fields are required.";
     }
-    else {
-        $message = mysqli_error($conn);
+
+    //Validate employee name
+    elseif (!preg_match ("/^[a-zA-Z]+$/", $full_name)){
+        $message = "Name can only contain letters and spaces.";
+    }
+
+    //Validate employee email
+    elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $message = "Please enter a valid email address.";
+    }
+
+
+    //Validate employee phone number
+    elseif(!preg_match("/^[0-9]{10}$/", $phone)){
+        $message = "Please enter a valid 10 digit phone number.";
+    }
+
+    else{
+
+    
+
+        //Update emloyee profile users
+        $update_sql = "UPDATE users
+        SET full_name = ?,
+        email = ?,
+        phone = ?
+        WHERE user_id = ?";
+
+        $update_stmt = mysqli_prepare($conn,$update_sql);
+
+        mysqli_stmt_bind_param(
+            $update_stmt,
+            "sssi",
+            $full_name,
+            $email,
+            $phone,
+            $user_id
+        );
+
+
+        if(mysqli_stmt_execute($update_stmt)){
+            $message = "Employee profile updated successfully." ;
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $user = mysqli_fetch_assoc($result);
+        }
+        else {
+            $message = mysqli_error($conn);
+            }    
     }
 }
 
