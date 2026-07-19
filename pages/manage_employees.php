@@ -59,6 +59,8 @@ $result = mysqli_query($conn,$sql);
                 <td><?php echo $row['account_status']; ?></td>
                 <td>
                     <a href = "edit_employee.php?id=<?php echo $row['user_id']; ?>">Edit</a>
+
+                    <a href = "update_employee_status.php?id=<?php echo $row['user_id'];  ?>&status="Inactive"> Deactivate </a>
                 </td>
             </tr>
 
