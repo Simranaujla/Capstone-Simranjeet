@@ -58,9 +58,23 @@ $result = mysqli_query($conn,$sql);
                 <td><?php echo $row['phone']; ?></td>
                 <td><?php echo $row['account_status']; ?></td>
                 <td>
-                    <a href = "edit_employee.php?id=<?php echo $row['user_id']; ?>">Edit</a>
+                    <a href="edit_employee.php?id=<?php echo $row['user_id']; ?>">Edit</a>
 
-                    <a href = "update_employee_status.php?id=<?php echo $row['user_id'];  ?>&status="Inactive"> Deactivate </a>
+                    |
+
+                    <?php if ($row['account_status'] == "Active") { ?>
+
+                        <a href="update_employee_status.php?id=<?php echo $row['user_id']; ?>&status=Inactive">
+                            Deactivate
+                        </a>
+
+                    <?php } else { ?>
+
+                        <a href="update_employee_status.php?id=<?php echo $row['user_id']; ?>&status=Active">
+                        Activate
+                        </a>
+
+                    <?php } ?>
                 </td>
             </tr>
 

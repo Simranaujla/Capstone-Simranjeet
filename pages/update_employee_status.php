@@ -16,7 +16,7 @@ $status = $_GET['status'];
 //Update employee account status
 $sql = "UPDATE users
 SET account_status = ?
-WHERE iser_id =? ";
+WHERE user_id =? ";
 
 $stmt = mysqli_prepare($conn,$sql);
 
