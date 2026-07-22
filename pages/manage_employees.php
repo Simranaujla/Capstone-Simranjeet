@@ -35,7 +35,9 @@ $result = mysqli_query($conn,$sql);
     </head>
 
     <body>
+        
         <h1>Manage Employees</h1>
+        <a href="create_employee.php">Create New Employee</a><br><br>
         <table border = "1" cellpadding = "8">
             <tr>
                 <th>Name</th>
