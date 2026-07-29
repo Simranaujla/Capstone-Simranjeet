@@ -13,21 +13,66 @@ if ($_SESSION['role_id'] != 1){
     exit();
 }
 
-//Fetch all employee work records
-$sql = "SELECT 
-time_records.record_id,
-users.full_name,
-time_records.work_date,
-time_records.punch_in,
-time_records.punch_out,
-time_records.total_hours,
-time_records.approval_status
-FROM time_records
-INNER JOIN users
-ON time_records.user_id = users.user_id
-ORDER BY time_records.record_id DESC ";
 
-$result = mysqli_query($conn, $sql);
+//Get filter work records
+
+$start_date = "";
+$end_date = "";
+if(isset($_GET['start_date'])){
+    $start_date = $_GET['start_date'];
+}
+
+
+if(isset($_GET['end_date'])){
+    $end_date = $_GET['end_date'];
+}
+
+//Fetch all employee work records
+if(!empty($start_date) && !empty($end_date)){
+
+
+    $sql = "SELECT 
+    time_records.record_id,
+    users.full_name,
+    time_records.work_date,
+    time_records.punch_in,
+    time_records.punch_out,
+    time_records.total_hours,
+    time_records.approval_status
+    FROM time_records
+    INNER JOIN users
+    ON time_records.user_id = users.user_id
+    WHERE time_records.work_date BETWEEN ? AND ?
+    ORDER BY time_records.record_id DESC ";
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ss",
+        $start_date,
+        $end_date
+    );
+
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+}
+else{
+    $sql = "SELECT
+    time_records.record_id,
+    users.full_name,
+    time_records.work_date,
+    time_records.punch_in,
+    time_records.punch_out,
+    time_records.total_hours,
+    time_records.approval_status
+    FROM time_records
+    INNER JOIN users
+    ON time_records.user_id = users.user_id
+    ORDER BY time_records.record_id DESC";
+
+    $result = mysqli_query($conn,$sql);
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +83,21 @@ $result = mysqli_query($conn, $sql);
 
     <body>
         <h1>Employee Work Records</h1>
+
+        <!-- Work records date filter --->
+        <form method="GET">
+
+            <label>From:</label>
+            <input type="date" name="start_date" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
+
+            <label>To:</label>
+            <input type="date" name="end_date" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
+
+            <button type="submit">Filter</button>
+
+
+        </form>
+        <br>
 
         <table border="1" cellpadding="10">
             <tr>
@@ -62,7 +122,7 @@ $result = mysqli_query($conn, $sql);
                    <td>
                       
                       <a href="update_status.php?id=<?php echo $row['record_id']; ?>&status=Approved" onclick = "return confirm('Approve this work record?')" >Approve</a>
-                      <a href ="update_status.php?id=<?php echo $row['record_id']; ?>&status=Rejected" onclick = "return conform('Reject this work record ?')" >Reject </a>
+                      <a href ="update_status.php?id=<?php echo $row['record_id']; ?>&status=Rejected" onclick = "return confirm('Reject this work record ?')" >Reject </a>
                    </td> 
 
                    
