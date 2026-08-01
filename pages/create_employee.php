@@ -39,6 +39,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $message = "Please enter a valid 10 digit phone number.";
     }
 
+    // Validate password strength
+    
+    elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W]).{8,}$/", $password)) {
+
+        $message = "Password must contain at least 8 characters, uppercase, lowercase, number, and special character.";
+
+    }
+
     else{
         // Check if email already exists
         $check_sql = "SELECT user_id
