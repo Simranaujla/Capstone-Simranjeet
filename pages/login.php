@@ -12,14 +12,16 @@
   if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
       //Get form data
-      $email = trim($_POST['email']);
+      $login = trim($_POST['email']);
       $password = trim($_POST['password']);
 
-      //SQL query to find user by email
-      $sql = "SELECT * FROM users WHERE email = ?";
+      //SQL query to find user by email or phone number
+      $sql = "SELECT * FROM users 
+            WHERE email = ? 
+            OR phone = ? ";
 
       $stmt = mysqli_prepare($conn,$sql);
-      mysqli_stmt_bind_param($stmt, "s" , $email);
+      mysqli_stmt_bind_param($stmt, "ss" , $login, $login);
       mysqli_stmt_execute($stmt);
       $result = mysqli_stmt_get_result($stmt);
 
@@ -67,8 +69,8 @@
         <p><?php echo $message; ?> </p>
 
         <form method="POST">
-            <label>Email Address</label><br>
-            <input type="email" name="email"><br><br>
+            <label>Enter your Email or Phone </label><br>
+            <input type="text" name="email" placeholder="Enter your email or phone number"><br><br>
 
             <label>Password</label><br>
             <input type="password" name="password"><br><br>
