@@ -27,6 +27,23 @@ if(isset($_GET['end_date'])){
     $end_date = $_GET['end_date'];
 }
 
+//Get sorting option
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'date_desc';
+
+//Set sorting based on selected option
+if($sort == 'date_asc'){
+    $order_by = "time_records.work_date ASC";
+}
+elseif($sort == 'hours_desc'){
+    $order_by = "time_Records.total_hours DESC";
+}
+elseif($sort == 'hours_asc'){
+    $order_by = "time_records.total_hours ASC";
+}
+else{
+    $order_by = "time_records.work_date DESC";
+}
+
 //Fetch all employee work records
 if(!empty($start_date) && !empty($end_date)){
 
@@ -43,7 +60,7 @@ if(!empty($start_date) && !empty($end_date)){
     INNER JOIN users
     ON time_records.user_id = users.user_id
     WHERE time_records.work_date BETWEEN ? AND ?
-    ORDER BY time_records.record_id DESC ";
+    ORDER BY $order_by ";
 
     $stmt = mysqli_prepare($conn, $sql);
 
@@ -69,7 +86,7 @@ else{
     FROM time_records
     INNER JOIN users
     ON time_records.user_id = users.user_id
-    ORDER BY time_records.record_id DESC";
+    ORDER BY $order_by";
 
     $result = mysqli_query($conn,$sql);
 }
@@ -95,6 +112,26 @@ else{
 
             <button type="submit">Filter</button>
 
+
+        </form>
+        <br>
+
+        <form method = "GET">
+
+            <input type="hidden" name="start_date" value="<?php echo htmlspecialchars($start_date); ?>">
+
+            <input type="hidden" name="end_date" value="<?php echo htmlspecialchars($end_date); ?>">
+
+
+            <label>Sort by:</label>
+            <select name="sort">
+                <option value="date_desc">Date: Newest First</option>
+                <option value="date_asc">Date: Oldest First</option>
+                <option value="hours_desc">Hours: Highest First</option>
+                <option value="hours_asc">Hours: Lowest First</option>
+            </select>
+
+            <button type="submit">Sort</button>
 
         </form>
         <br>
