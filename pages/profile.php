@@ -136,8 +136,10 @@
             <button type = "submit"> Update Profile </button>
         </form>
         <br>
-
+        
+        <a href="change_password.php">Change Password</a>
         <a href = "dashboard.php">Back to Dashboard </a>
+
 
 
 
