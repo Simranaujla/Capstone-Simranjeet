@@ -1,5 +1,6 @@
 <?php
-session_start();
+
+require_once '../config/session_check.php';
 require_once '../config/database.php';
 
 

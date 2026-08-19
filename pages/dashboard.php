@@ -1,6 +1,7 @@
 <?php
    //Start session
-   session_start();
+   
+   require_once '../config/session_check.php';
 
    //Check if user is logged in 
    if (!isset($_SESSION['user_id'])){
