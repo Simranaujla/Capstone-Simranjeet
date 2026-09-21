@@ -5,7 +5,7 @@
 
    //Check if user is logged in 
    if (!isset($_SESSION['user_id'])){
-    header ("Location : login.php");
+    header("Location: login.php");
     exit();
    }
 ?>
@@ -21,7 +21,7 @@
 
         <p>Welcome, <?php echo $_SESSION['full_name']; ?> </p>
         <p>You are successfully logged in. </p>
-        <a href="time_tracking.php">Time Tracking</a><br><br>
+        
 
         <?php
           if ($_SESSION['role_id']== 1){
@@ -35,6 +35,7 @@
           else{
             echo "<h3>Employee Dashboard</h3>";
             echo "<p>View work hours and punch records.</p>";
+            echo '<a href="time_tracking.php">Time Tracking</a><br><br>';
             echo '<a href="profile.php">My Profile</a><br><br>';
             echo '<a href="announcements.php">Announcements</a><br><br>';
 

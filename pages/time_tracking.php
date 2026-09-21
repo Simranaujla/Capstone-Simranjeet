@@ -9,6 +9,12 @@
     exit();
  }
 
+ // Only employees can access the time tracking page
+if ($_SESSION['role_id'] != 2) {
+    header("Location: dashboard.php");
+    exit();
+}
+
  $message = "";
 
  if ($_SERVER["REQUEST_METHOD"] == "POST"){

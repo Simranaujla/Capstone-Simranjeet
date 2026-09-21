@@ -27,65 +27,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     } else {
 
-        // Validate password strength
-        $password_pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W]).{8,}$/";
+        // Validate phone number
+        if (!preg_match('/^\d{10}$/', $phone)) {
+            $message = "Phone number must contain exactly 10 digits.";
+        }
+        else{
 
-        if (!preg_match($password_pattern, $password)) {
+            // Validate password strength
+            $password_pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W]).{8,}$/";
 
-            $message = "Password must contain at least 8 characters, uppercase, lowercase, number, and special character.";
+            if (!preg_match($password_pattern, $password)) {
 
-        } else {
-
-            // Check if email already exists
-            $check_email_sql = "SELECT * FROM users WHERE email = ?";
-
-            $check_stmt = mysqli_prepare($conn, $check_email_sql);
-
-            mysqli_stmt_bind_param($check_stmt, "s", $email);
-
-            mysqli_stmt_execute($check_stmt);
-
-            $email_result = mysqli_stmt_get_result($check_stmt);
-
-            if (mysqli_num_rows($email_result) > 0) {
-
-                $message = "Email already exists.";
+                $message = "Password must contain at least 8 characters, uppercase, lowercase, number, and special character.";
 
             } else {
 
-                // Hash password before storing in database
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                // Check if email already exists
+                $check_email_sql = "SELECT * FROM users WHERE email = ?";
 
-                // Insert user into database
-                $sql = "INSERT INTO users 
-                (role_id, full_name, email, phone, password_hash)
-                VALUES (?, ?, ?, ?, ?)";
+                $check_stmt = mysqli_prepare($conn, $check_email_sql);
 
-                $stmt = mysqli_prepare($conn, $sql);
+                mysqli_stmt_bind_param($check_stmt, "s", $email);
 
-                mysqli_stmt_bind_param(
-                    $stmt,
-                    "issss",
-                    $role_id,
-                    $full_name,
-                    $email,
-                    $phone,
-                    $hashed_password
-                );
+                mysqli_stmt_execute($check_stmt);
 
-                // Execute query
-                if (mysqli_stmt_execute($stmt)) {
+                $email_result = mysqli_stmt_get_result($check_stmt);
 
-                     $message = "Registration successful.";
+                if (mysqli_num_rows($email_result) > 0) {
 
-               } else {
+                    $message = "Email already exists.";
 
-                     $message = mysqli_error($conn);
+                } else {
+
+                    // Hash password before storing in database
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+                    // Insert user into database
+                    $sql = "INSERT INTO users 
+                    (role_id, full_name, email, phone, password_hash)
+                    VALUES (?, ?, ?, ?, ?)";
+
+                    $stmt = mysqli_prepare($conn, $sql);
+
+                    mysqli_stmt_bind_param(
+                        $stmt,
+                        "issss",
+                        $role_id,
+                        $full_name,
+                        $email,
+                        $phone,
+                        $hashed_password
+                    );
+
+                    // Execute query
+                    if (mysqli_stmt_execute($stmt)) {
+
+                        $message = "Registration successful.";
+
+                    } else {
+
+                        $message = mysqli_error($conn);
+                    }
                 }
             }
         }
     }
 }
+
 
 ?>
 
