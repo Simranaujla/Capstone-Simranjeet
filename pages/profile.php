@@ -128,11 +128,11 @@
         <p><?php echo $message;?><p>
         <form method="POST">
             <label>Full Name</label> <br>
-            <input type = "text" name ="full_name" value = " <?php echo $user['full_name']; ?> " ><br><br>
+            <input type = "text" name ="full_name" value = "<?php echo $user['full_name']; ?>" ><br><br>
 
-            <input type = "email" value = " <?php echo $user['email']; ?> " ><br><br>
+            <input type = "email" name ="email" value = "<?php echo $user['email']; ?>" ><br><br>
 
-            <input type = "text" name ="phone" value = " <?php echo $user['phone']; ?> " ><br><br>
+            <input type = "text" name ="phone" value = "<?php echo $user['phone']; ?>" ><br><br>
 
             <button type = "submit"> Update Profile </button>
         </form>
