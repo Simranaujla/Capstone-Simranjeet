@@ -1,5 +1,8 @@
 <?php
-require_once '../config/session_check.php';
+//Start session for API 
+if(session_status() === PHP_SESSION_NONE){
+    session_start();
+}
 require_once '../config/database.php';
 
 //tell client that this endpoint returns JSON
@@ -17,6 +20,27 @@ if(!isset($_SESSION['user_id'])){
     exit();
 }
 
+//Check session timeout (30 minutes)
+if(isset($_SESSION['last_activity'])){
+    $inactive_time = time() - $_SESSION['last_activity'];
+
+    if($inactive_time >= 1800){
+        session_unset();
+        session_destroy();
+
+        http_response_code(401);
+
+        echo json_encode([
+            "message" => "Session expired. Please log in again."
+        ]);
+
+        exit();
+    }
+
+}
+
+//Update last activity time 
+$_SESSION['last_activity'] = time();
 
 //ONly allow PUT requests
 if($_SERVER["REQUEST_METHOD"] !== "PUT"){
@@ -31,6 +55,16 @@ if($_SERVER["REQUEST_METHOD"] !== "PUT"){
 
 //Read JSON data sent from Postman
 $data = json_decode(file_get_contents("php://input"),true);
+
+//Check if JSON data is valid 
+if(!is_array($data) || json_last_error() !== JSON_ERROR_NONE){
+    http_response_code(400);
+
+    echo json_encode([
+        "message" => "Invalid JSON data. "
+    ]);
+    exit();
+}
 
 //Get profile information from JSON data 
 $full_name = trim($data['full_name']?? '');
@@ -116,12 +150,12 @@ if(mysqli_num_rows($check_result) > 0){
 
 
 
-//Update profile information 
+// Update profile information
 $update_sql = "UPDATE users
-                SET full_name =?,
-                    email = ? .
-                    phone ?
-                WHERE user_id ?";
+               SET full_name = ?,
+                   email = ?,
+                   phone = ?
+               WHERE user_id = ?";
 
 
 $update_stmt = mysqli_prepare($conn,$update_sql);
@@ -134,3 +168,21 @@ mysqli_stmt_bind_param(
     $phone,
     $_SESSION['user_id']
 );
+
+//Execute profile update 
+
+if(mysqli_stmt_execute($update_stmt)){
+    http_response_code(200);
+
+    echo json_encode([
+        "message" => "Profile updated successfully."
+    ]);
+}
+
+else{
+    http_response_code(500);
+
+    echo json_encode([
+        "message" => "Unable to update profile."
+    ]);
+}
