@@ -61,8 +61,23 @@ if(!is_array($data) || json_last_error() !== JSON_ERROR_NONE){
     http_response_code(400);
 
     echo json_encode([
-        "message" => "Invalid JSON data. "
+        "message" => "Invalid JSON data."
     ]);
+    exit();
+}
+
+// Check that profile fields contain text
+if (
+    !is_string($data['full_name'] ?? '') ||
+    !is_string($data['email'] ?? '') ||
+    !is_string($data['phone'] ?? '')
+) {
+    http_response_code(400);
+
+    echo json_encode([
+        "message" => "Profile fields must contain text."
+    ]);
+
     exit();
 }
 
@@ -125,7 +140,20 @@ $check_sql = "SELECT user_id
              WHERE email = ?
              AND user_id != ?";
 
-$check_stmt = mysqli_prepare($conn,$check_sql);
+// Prepare duplicate email query
+try {
+    $check_stmt = mysqli_prepare($conn, $check_sql);
+} catch (mysqli_sql_exception $e) {
+    error_log($e->getMessage());
+
+    http_response_code(500);
+
+    echo json_encode([
+        "message" => "Unable to prepare email check."
+    ]);
+
+    exit();
+}
 
 mysqli_stmt_bind_param(
     $check_stmt,
@@ -134,9 +162,21 @@ mysqli_stmt_bind_param(
     $_SESSION['user_id']
 );
 
-mysqli_stmt_execute($check_stmt);
+// Execute duplicate email check
+try {
+    mysqli_stmt_execute($check_stmt);
+    $check_result = mysqli_stmt_get_result($check_stmt);
+} catch (mysqli_sql_exception $e) {
+    error_log($e->getMessage());
 
-$check_result = mysqli_stmt_get_result($check_stmt);
+    http_response_code(500);
+
+    echo json_encode([
+        "message" => "Unable to check email."
+    ]);
+
+    exit();
+}
 
 if(mysqli_num_rows($check_result) > 0){
     http_response_code(409);
@@ -158,7 +198,20 @@ $update_sql = "UPDATE users
                WHERE user_id = ?";
 
 
-$update_stmt = mysqli_prepare($conn,$update_sql);
+// Prepare profile update query
+try {
+    $update_stmt = mysqli_prepare($conn, $update_sql);
+} catch (mysqli_sql_exception $e) {
+    error_log($e->getMessage());
+
+    http_response_code(500);
+
+    echo json_encode([
+        "message" => "Unable to prepare profile update."
+    ]);
+
+    exit();
+}
 
 mysqli_stmt_bind_param(
     $update_stmt,
@@ -170,8 +223,15 @@ mysqli_stmt_bind_param(
 );
 
 //Execute profile update 
+try{
+    $updated = mysqli_stmt_execute($update_stmt);
+}catch(mysqli_sql_exception $e){
+    error_log($e->getMessage());
+    $updated = false;
+}
 
-if(mysqli_stmt_execute($update_stmt)){
+
+if($updated){
     http_response_code(200);
 
     echo json_encode([
