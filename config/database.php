@@ -8,8 +8,11 @@
 
   $conn = mysqli_connect($host, $username, $password, $database);
 
-  if (!$conn) {
-    error_log("Database connection failed: " . mysqli_connect_error());
-    die("Database connection failed.");
+  try {
+    $conn = mysqli_connect($host, $username, $password, $database);
+  } catch (mysqli_sql_exception $e) {
+    error_log("Database connection failed: " . $e->getMessage());
+    http_response_code(503);
+    die("Database temporarily unavailable.");
   }
 ?>
