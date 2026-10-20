@@ -36,7 +36,7 @@ if($sort == 'date_asc'){
     $order_by = "time_records.work_date ASC";
 }
 elseif($sort == 'hours_desc'){
-    $order_by = "time_Records.total_hours DESC";
+    $order_by = "time_records.total_hours DESC";
 }
 elseif($sort == 'hours_asc'){
     $order_by = "time_records.total_hours ASC";

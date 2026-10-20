@@ -116,7 +116,7 @@ if ($_SESSION['role_id'] != 2) {
         $message = "You already punched in today.";
     }else{
         // Insert time record into database
-        $sql = "INSERT INTO time_Records
+        $sql = "INSERT INTO time_records
             (user_id, work_date, punch_in) 
             VALUES (?,?,?)";
 
