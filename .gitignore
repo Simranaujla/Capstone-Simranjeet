@@ -1,3 +1,13 @@
 vendor/
 node_modules/
 cypress.env.json
+
+# Environment files containing credentials
+.env
+.env.*
+
+# Local Postman environment files
+*.postman_environment.json
+
+# macOS system files
+.DS_Store

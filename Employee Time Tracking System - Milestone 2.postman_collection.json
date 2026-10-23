@@ -1,0 +1,917 @@
+{
+  "info": {
+    "_postman_id": "7772b17e-2878-4cdf-b5f6-2e07bfa8a4e8",
+    "name": "Employee Time Tracking System - Milestone 2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58800647",
+    "_collection_link": "https://go.postman.co/collection/58800647-7772b17e-2878-4cdf-b5f6-2e07bfa8a4e8?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "TC-API-00 - Automated Login.",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Login redirects to dashboard\", function () {\n    pm.response.to.have.status(302);\n});\n\npm.test(\"Login creates a PHP session\", function () {\n    pm.expect(pm.cookies.has(\"PHPSESSID\")).to.be.true;\n});"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "{{testEmail}}"
+            },
+            {
+              "key": "password",
+              "value": "{{testPassword}}"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/login.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "login.php"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-API-01 - Unauthorized Profile Update",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Unauthorized user receives 401 status\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Correct error message is returned\", function () {\n    pm.expect(pm.response.json().message).to.eql(\"User is not logged in.\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8888/capstone-Simranaujla/api/profile.php",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "api",
+            "profile.php"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "TC-API-01 - Unauthorized Profile Update",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "capstone-Simranaujla",
+                "api",
+                "profile.php"
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "date",
+              "value": "Wed, 21 Oct 2026 02:35:37 GMT"
+            },
+            {
+              "key": "server",
+              "value": "Apache/2.4.65 (Unix) OpenSSL/1.1.1w mod_fastcgi/mod_fastcgi-SNAP-0910052141"
+            },
+            {
+              "key": "x-powered-by",
+              "value": "PHP/8.3.28"
+            },
+            {
+              "key": "expires",
+              "value": "Thu, 19 Nov 1981 08:52:00 GMT"
+            },
+            {
+              "key": "cache-control",
+              "value": "no-store, no-cache, must-revalidate"
+            },
+            {
+              "key": "pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=5, max=100"
+            },
+            {
+              "key": "connection",
+              "value": "Keep-Alive"
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"User is not logged in.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "TC-API-02 - Invalid HTTP Method",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Invalid HTTP method returns 405\", function () {\n    pm.response.to.have.status(405);\n});\n\npm.test(\"Correct method error message is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\"Only PUT requests are allowed.\");\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "api",
+            "profile.php"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "TC-API-02 - Invalid HTTP Method",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "capstone-Simranaujla",
+                "api",
+                "profile.php"
+              ]
+            }
+          },
+          "status": "Method Not Allowed",
+          "code": 405,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "date",
+              "value": "Wed, 21 Oct 2026 02:47:14 GMT"
+            },
+            {
+              "key": "server",
+              "value": "Apache/2.4.65 (Unix) OpenSSL/1.1.1w mod_fastcgi/mod_fastcgi-SNAP-0910052141"
+            },
+            {
+              "key": "x-powered-by",
+              "value": "PHP/8.3.28"
+            },
+            {
+              "key": "expires",
+              "value": "Thu, 19 Nov 1981 08:52:00 GMT"
+            },
+            {
+              "key": "cache-control",
+              "value": "no-store, no-cache, must-revalidate"
+            },
+            {
+              "key": "pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=5, max=100"
+            },
+            {
+              "key": "connection",
+              "value": "Keep-Alive"
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Only PUT requests are allowed.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "TC-API-03 - Invalid JSON Data",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Invalid JSON returns 400 status\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Correct invalid JSON message is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\"Invalid JSON data.\");\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"1234567890\",",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "api",
+            "profile.php"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "TC-API-03 - Invalid JSON Data",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"1234567890\",",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "capstone-Simranaujla",
+                "api",
+                "profile.php"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "date",
+              "value": "Wed, 21 Oct 2026 02:49:32 GMT"
+            },
+            {
+              "key": "server",
+              "value": "Apache/2.4.65 (Unix) OpenSSL/1.1.1w mod_fastcgi/mod_fastcgi-SNAP-0910052141"
+            },
+            {
+              "key": "x-powered-by",
+              "value": "PHP/8.3.28"
+            },
+            {
+              "key": "expires",
+              "value": "Thu, 19 Nov 1981 08:52:00 GMT"
+            },
+            {
+              "key": "cache-control",
+              "value": "no-store, no-cache, must-revalidate"
+            },
+            {
+              "key": "pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Invalid JSON data.\"\n}"
+        },
+        {
+          "name": "TC-API-03 - Invalid JSON Data",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"1234567890\",",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "capstone-Simranaujla",
+                "api",
+                "profile.php"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "date",
+              "value": "Wed, 21 Oct 2026 02:50:53 GMT"
+            },
+            {
+              "key": "server",
+              "value": "Apache/2.4.65 (Unix) OpenSSL/1.1.1w mod_fastcgi/mod_fastcgi-SNAP-0910052141"
+            },
+            {
+              "key": "x-powered-by",
+              "value": "PHP/8.3.28"
+            },
+            {
+              "key": "expires",
+              "value": "Thu, 19 Nov 1981 08:52:00 GMT"
+            },
+            {
+              "key": "cache-control",
+              "value": "no-store, no-cache, must-revalidate"
+            },
+            {
+              "key": "pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Invalid JSON data.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "TC-API-04 - Invalid Phone Number",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Invalid phone number returns 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Correct phone validation message\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\n        \"Please enter a valid 10 digit phone number.\"\n    );\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"testemployee@example.com\",\n  \"phone\": \"12345\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "api",
+            "profile.php"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "TC-API-04 - Invalid Phone Number",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"testemployee@example.com\",\n  \"phone\": \"12345\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "capstone-Simranaujla",
+                "api",
+                "profile.php"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "date",
+              "value": "Wed, 21 Oct 2026 02:53:20 GMT"
+            },
+            {
+              "key": "server",
+              "value": "Apache/2.4.65 (Unix) OpenSSL/1.1.1w mod_fastcgi/mod_fastcgi-SNAP-0910052141"
+            },
+            {
+              "key": "x-powered-by",
+              "value": "PHP/8.3.28"
+            },
+            {
+              "key": "expires",
+              "value": "Thu, 19 Nov 1981 08:52:00 GMT"
+            },
+            {
+              "key": "cache-control",
+              "value": "no-store, no-cache, must-revalidate"
+            },
+            {
+              "key": "pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Please enter a valid 10 digit phone number.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "TC-API-05 - Invalid Email Format",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Invalid email returns 400 status\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Correct email validation message is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\n        \"Please enter a valid email address.\"\n    );\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"invalidemail\",\n  \"phone\": \"1234567890\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "api",
+            "profile.php"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "TC-API-05 - Invalid Email Format",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"invalidemail\",\n  \"phone\": \"1234567890\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "capstone-Simranaujla",
+                "api",
+                "profile.php"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "date",
+              "value": "Wed, 21 Oct 2026 02:55:04 GMT"
+            },
+            {
+              "key": "server",
+              "value": "Apache/2.4.65 (Unix) OpenSSL/1.1.1w mod_fastcgi/mod_fastcgi-SNAP-0910052141"
+            },
+            {
+              "key": "x-powered-by",
+              "value": "PHP/8.3.28"
+            },
+            {
+              "key": "expires",
+              "value": "Thu, 19 Nov 1981 08:52:00 GMT"
+            },
+            {
+              "key": "cache-control",
+              "value": "no-store, no-cache, must-revalidate"
+            },
+            {
+              "key": "pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Please enter a valid email address.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "TC-API-06 - Invalid Name",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Invalid name returns 400 status\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Correct name validation message is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\n        \"Name can only contain letters and spaces.\"\n    );\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"Test123\",\n  \"email\": \"testemployee@example.com\",\n  \"phone\": \"1234567890\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "api",
+            "profile.php"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "TC-API-06 - Invalid Name",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Test123\",\n  \"email\": \"testemployee@example.com\",\n  \"phone\": \"1234567890\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "capstone-Simranaujla",
+                "api",
+                "profile.php"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "date",
+              "value": "Wed, 21 Oct 2026 02:57:19 GMT"
+            },
+            {
+              "key": "server",
+              "value": "Apache/2.4.65 (Unix) OpenSSL/1.1.1w mod_fastcgi/mod_fastcgi-SNAP-0910052141"
+            },
+            {
+              "key": "x-powered-by",
+              "value": "PHP/8.3.28"
+            },
+            {
+              "key": "expires",
+              "value": "Thu, 19 Nov 1981 08:52:00 GMT"
+            },
+            {
+              "key": "cache-control",
+              "value": "no-store, no-cache, must-revalidate"
+            },
+            {
+              "key": "pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Name can only contain letters and spaces.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "TC-API-07 - Successful Profile Update",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Valid profile update returns 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Correct success message is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\n        \"Profile updated successfully.\"\n    );\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"1234567890\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "api",
+            "profile.php"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "TC-API-07 - Successful Profile Update",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"testemployee@example.com\",\n  \"phone\": \"1234567890\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8888/capstone-Simranaujla/api/profile.php",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "capstone-Simranaujla",
+                "api",
+                "profile.php"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "date",
+              "value": "Wed, 21 Oct 2026 02:58:57 GMT"
+            },
+            {
+              "key": "server",
+              "value": "Apache/2.4.65 (Unix) OpenSSL/1.1.1w mod_fastcgi/mod_fastcgi-SNAP-0910052141"
+            },
+            {
+              "key": "x-powered-by",
+              "value": "PHP/8.3.28"
+            },
+            {
+              "key": "expires",
+              "value": "Thu, 19 Nov 1981 08:52:00 GMT"
+            },
+            {
+              "key": "cache-control",
+              "value": "no-store, no-cache, must-revalidate"
+            },
+            {
+              "key": "pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=5, max=100"
+            },
+            {
+              "key": "connection",
+              "value": "Keep-Alive"
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Profile updated successfully.\"\n}"
+        }
+      ]
+    }
+  ]
+}
