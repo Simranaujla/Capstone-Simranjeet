@@ -1,0 +1,24 @@
+/* General page styling */
+body {
+    background-color: #f5f7fa;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Navigation bar */
+.navbar {
+    background-color: #234e70 !important;
+    padding: 15px 25px;
+}
+
+/* Website title */
+.navbar-brand {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Dashboard heading */
+h1 {
+    color: #234e70;
+    font-weight: 600;
+}

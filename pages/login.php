@@ -1,3 +1,4 @@
+
 <?php
 
 // Start session
@@ -141,28 +142,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Login</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Login - Employee Time Tracking System</title>
+
+        <!-- Bootstrap 5 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="../assets/css/style.css">
     </head>
 
     <body>
-        <h1>Employee time Tracking System</h1>
+        <div class="container py-5">
 
-        <h2>User Login</h2>
+            <h1 class="text-center mb-4">Employee Time Tracking System</h1>
 
-        <p><?php echo $message; ?> </p>
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
 
-        <form method="POST">
-            <label>Enter your Email or Phone </label><br>
-            <input type="text" name="email" placeholder="Enter your email or phone number"><br><br>
+                            <h2 class="text-center mb-4">User Login</h2>
 
-            <label>Password</label><br>
-            <input type="password" name="password"><br><br>
+                            <?php if (!empty($message)): ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+                                </div>
+                            <?php endif; ?>
 
-            <button type="submit">Login</button>
-        </form>
+                            <form method="POST">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Email or Phone</label>
+                                    <input
+                                        type="text"
+                                        name="email"
+                                        class="form-control"
+                                        placeholder="Enter your email or phone number"
+                                        required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        class="form-control"
+                                        placeholder="Enter your password"
+                                        required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100">
+                                    Login
+                                </button>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </body>
 </html>
