@@ -40,7 +40,7 @@
         <main class="container py-4">
         <h1 class="mb-4">Dashboard</h1>
 
-        <p>Welcome, <?php echo $_SESSION['full_name']; ?> </p>
+        <p>Welcome, <?php echo htmlspecialchars($_SESSION['full_name'], ENT_QUOTES, 'UTF-8'); ?></p>
         <p>You are successfully logged in. </p>
         
 
