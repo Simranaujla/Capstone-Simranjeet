@@ -8,54 +8,6 @@
   },
   "item": [
     {
-      "name": "TC-API-00 - Automated Login.",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test(\"Login redirects to dashboard\", function () {\n    pm.response.to.have.status(302);\n});\n\npm.test(\"Login creates a PHP session\", function () {\n    pm.expect(pm.cookies.has(\"PHPSESSID\")).to.be.true;\n});"
-            ]
-          }
-        }
-      ],
-      "protocolProfileBehavior": {
-        "followRedirects": false
-      },
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "urlencoded",
-          "urlencoded": [
-            {
-              "key": "email",
-              "value": "{{testEmail}}"
-            },
-            {
-              "key": "password",
-              "value": "{{testPassword}}"
-            }
-          ]
-        },
-        "url": {
-          "raw": "http://localhost:8888/capstone-Simranaujla/pages/login.php",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8888",
-          "path": [
-            "capstone-Simranaujla",
-            "pages",
-            "login.php"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "TC-M3-00 - Employee Login",
       "event": [
         {
@@ -98,6 +50,138 @@
             "capstone-Simranaujla",
             "pages",
             "login.php"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-01 - Employee Access Restriction",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Employee access restriction returns 302\", function () {\n    pm.response.to.have.status(302);\n});\n\npm.test(\"Employee is redirected to dashboard\", function () {\n    pm.expect(pm.response.headers.get(\"Location\")).to.eql(\"dashboard.php\");\n});"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "manage_records.php"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-API-00 - Automated Login.",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Login redirects to dashboard\", function () {\n    pm.response.to.have.status(302);\n});\n\npm.test(\"Login creates a PHP session\", function () {\n    pm.expect(pm.cookies.has(\"PHPSESSID\")).to.be.true;\n});"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\nconsole.log(\"Login email:\", pm.variables.get(\"testEmail\"));\nconsole.log(\"Environment email:\", pm.environment.get(\"testEmail\"));\n"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "{{testEmail}}"
+            },
+            {
+              "key": "password",
+              "value": "{{testPassword}}"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/login.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "login.php"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-02A - Get CSRF Token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Manage Records page loads successfully\", function () {\n    pm.response.to.have.status(200);\n});\n\nconst html = pm.response.text();\n\nconst match = html.match(/name=[\"']csrf_token[\"'][^>]*value=[\"']([^\"']+)[\"']/);\n\npm.test(\"CSRF token is found\", function () {\n    pm.expect(match).to.not.be.null;\n});\n\nif (match) {\n    pm.collectionVariables.set(\"csrfToken\", match[1]);\n}"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "manage_records.php"
           ]
         }
       },
@@ -851,7 +935,16 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "\npm.test(\"Valid profile update returns 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Correct success message is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\n        \"Profile updated successfully.\"\n    );\n});\n"
+              "\npm.test(\"Valid profile update returns 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Correct success message is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\n        \"Profile updated successfully.\"\n    );\n});\n\n\nif (pm.response.code === 200) {\n    pm.environment.set(\n        \"testEmail\",\n        pm.variables.get(\"uniqueEmail\")\n    );\n}\n"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\nconst uniqueEmail = \"capstone.test.\" + Date.now() + \"@example.com\";\n\npm.variables.set(\"uniqueEmail\", uniqueEmail);\n"
             ]
           }
         }
@@ -861,7 +954,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"1234567890\"\n}",
+          "raw": "{\n  \"full_name\": \"Test Employee\",\n  \"email\": \"{{uniqueEmail}}\",\n  \"phone\": \"1234567890\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -962,14 +1055,14 @@
       ]
     },
     {
-      "name": "TC-M3-01 - Employee Access Restriction",
+      "name": "TC-M3-02 - Approve Time Record",
       "event": [
         {
           "listen": "test",
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test(\"Employee access restriction returns 302\", function () {\n    pm.response.to.have.status(302);\n});\n\npm.test(\"Employee is redirected to dashboard\", function () {\n    pm.expect(pm.response.headers.get(\"Location\")).to.eql(\"dashboard.php\");\n});"
+              "pm.test(\"Approve request redirects to Manage Records\", function () {\n    pm.response.to.have.status(302);\n    pm.expect(pm.response.headers.get(\"Location\").toLowerCase())\n        .to.eql(\"manage_records.php\");\n});"
             ]
           }
         }
@@ -978,13 +1071,57 @@
         "followRedirects": false
       },
       "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "",
-            "value": ""
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "id",
+              "value": "{{recordId}}"
+            },
+            {
+              "key": "status",
+              "value": "Approved"
+            },
+            {
+              "key": "csrf_token",
+              "value": "{{csrfToken}}"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/update_status.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "update_status.php"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-03 - Verify Approved Record",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Manage Records page loads\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Record 12 is Approved\", function () {\n    const recordId = String(pm.collectionVariables.get(\"recordId\"));\n    const $ = cheerio.load(pm.response.text());\n\n    const row = $(\"tr\").filter(function () {\n        return $(this).find('input[name=\"id\"]').filter(function () {\n            return $(this).val() === recordId;\n        }).length > 0;\n    }).first();\n\n    pm.expect(row.length, \"Record row should exist\").to.eql(1);\n\n    const status = row.find(\"td\").eq(5).text().trim();\n\n    pm.expect(status).to.eql(\"Approved\");\n});\n"
+            ]
           }
-        ],
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
         "url": {
           "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php",
           "protocol": "http",
@@ -1000,6 +1137,342 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "TC-M3-04 - Reject Time Record",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Reject request redirects to Manage Records\", function () {\n    pm.response.to.have.status(302);\n\n    pm.expect(\n        pm.response.headers.get(\"Location\").toLowerCase()\n    ).to.eql(\"manage_records.php\");\n});\n"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "id",
+              "value": "{{rejectRecordId}}"
+            },
+            {
+              "key": "status",
+              "value": "Rejected"
+            },
+            {
+              "key": "csrf_token",
+              "value": "{{csrfToken}}"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/update_status.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "update_status.php"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-05 - Verify Rejected Record",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Manage Records page loads\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Record 18 is Rejected\", function () {\n    const recordId = String(pm.collectionVariables.get(\"rejectRecordId\"));\n    const $ = cheerio.load(pm.response.text());\n\n    const row = $(\"tr\").filter(function () {\n        return $(this).find('input[name=\"id\"]').filter(function () {\n            return $(this).val() === recordId;\n        }).length > 0;\n    }).first();\n\n    pm.expect(row.length, \"Record row should exist\").to.eql(1);\n\n    const status = row.find(\"td\").eq(5).text().trim();\n\n    pm.expect(status).to.eql(\"Rejected\");\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "manage_records.php"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-06 - Search Employee Records",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Search page loads successfully\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"No matching employee records found\", function () {\n    const $ = cheerio.load(pm.response.text());\n\n    const recordRows = $(\"table tbody tr\").filter(function () {\n        return $(this).find(\"td\").length >= 6;\n    });\n\n    pm.expect(recordRows.length).to.eql(0);\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php?search=zzzznonexistentemployee999",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "manage_records.php"
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "zzzznonexistentemployee999"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-07 - Search Existing Employee",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Search page loads successfully\", function () {\n    pm.response.to.have.status(200);\n});\n\nconst $ = cheerio.load(pm.response.text());\n\nconst rows = $(\"table tr\").filter(function () {\n    return $(this).find(\"td\").length >= 6;\n});\n\npm.test(\"Test Employee records are found\", function () {\n    pm.expect(rows.length).to.be.above(0);\n});\n\npm.test(\"All results belong to Test Employee\", function () {\n    pm.expect(rows.length).to.be.above(0);\n\n    rows.each(function () {\n        const employeeName = $(this).find(\"td\").eq(0).text().trim();\n\n        pm.expect(employeeName).to.include(\"Test Employee\");\n    });\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php?search=Test%20Employee",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "manage_records.php"
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "Test%20Employee"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-08 - Filter Records by Date",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Date filter page loads\", function () {\n    pm.response.to.have.status(200);\n});\n\nconst $ = cheerio.load(pm.response.text());\n\nconst rows = $(\"table tr\").filter(function () {\n    return $(this).find(\"td\").length >= 6;\n});\n\npm.test(\"Filtered records are found\", function () {\n    pm.expect(rows.length).to.be.above(0);\n});\n\npm.test(\"All records match selected date\", function () {\n    pm.expect(rows.length).to.be.above(0);\n\n    rows.each(function () {\n        const workDate = $(this).find(\"td\").eq(1).text().trim();\n\n        pm.expect(workDate).to.eql(\"2026-09-26\");\n    });\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php?start_date=2026-09-26&end_date=2026-09-26",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "manage_records.php"
+          ],
+          "query": [
+            {
+              "key": "start_date",
+              "value": "2026-09-26"
+            },
+            {
+              "key": "end_date",
+              "value": "2026-09-26"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-09 - Sort Records by Date",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Sort page loads successfully\", function () {\n    pm.response.to.have.status(200);\n});\n\nconst $ = cheerio.load(pm.response.text());\n\nconst rows = $(\"table tbody tr\");\n\npm.test(\"Records are found\", function () {\n    pm.expect(rows.length).to.be.above(0);\n});\n\npm.test(\"Records are sorted by newest date first\", function () {\n    const dates = [];\n\n    rows.each(function () {\n        const date = $(this).find(\"td\").eq(1).text().trim();\n        dates.push(date);\n    });\n\n    const sortedDates = [...dates].sort().reverse();\n\n    pm.expect(dates).to.deep.eql(sortedDates);\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php?sort=date_desc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "manage_records.php"
+          ],
+          "query": [
+            {
+              "key": "sort",
+              "value": "date_desc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-10 - Sort Records by Hours",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Sort page loads successfully\", function () {\n    pm.response.to.have.status(200);\n});\n\nconst $ = cheerio.load(pm.response.text());\nconst rows = $(\"table tbody tr\");\n\npm.test(\"Records are found\", function () {\n    pm.expect(rows.length).to.be.above(0);\n});\n\npm.test(\"Records are sorted by highest hours first\", function () {\n    const hours = [];\n\n    rows.each(function () {\n        const value = $(this).find(\"td\").eq(4).text().trim();\n        hours.push(Number(value));\n    });\n\n    pm.expect(hours.every(Number.isFinite)).to.be.true;\n\n    const sortedHours = [...hours].sort((a, b) => b - a);\n\n    pm.expect(hours).to.deep.eql(sortedHours);\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php?sort=hours_desc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "manage_records.php"
+          ],
+          "query": [
+            {
+              "key": "sort",
+              "value": "hours_desc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-M3-11 - Sort Records by Hours (Lowest First)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Sort page loads successfully\", function () {\n    pm.response.to.have.status(200);\n});\n\nconst $ = cheerio.load(pm.response.text());\nconst rows = $(\"table tbody tr\");\n\npm.test(\"Records are found\", function () {\n    pm.expect(rows.length).to.be.above(0);\n});\n\npm.test(\"Records are sorted by lowest hours first\", function () {\n    const hours = [];\n\n    rows.each(function () {\n        const value = $(this).find(\"td\").eq(4).text().trim();\n        hours.push(Number(value));\n    });\n\n    pm.expect(hours.every(Number.isFinite)).to.be.true;\n\n    const sortedHours = [...hours].sort((a, b) => a - b);\n\n    pm.expect(hours).to.deep.eql(sortedHours);\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:8888/capstone-Simranaujla/pages/manage_records.php?sort=hours_asc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "capstone-Simranaujla",
+            "pages",
+            "manage_records.php"
+          ],
+          "query": [
+            {
+              "key": "sort",
+              "value": "hours_asc"
+            }
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "variable": [
@@ -1009,6 +1482,18 @@
     },
     {
       "key": "employeeEmail",
+      "value": ""
+    },
+    {
+      "key": "csrfToken",
+      "value": ""
+    },
+    {
+      "key": "recordId",
+      "value": ""
+    },
+    {
+      "key": "rejectRecordId",
       "value": ""
     }
   ]
