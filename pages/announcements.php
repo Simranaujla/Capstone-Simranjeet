@@ -13,6 +13,14 @@
 
     //Process announcement form submission
     if ($_SERVER ["REQUEST_METHOD"] == "POST"){
+
+        if ($_SESSION['role_id'] != 1) {
+        http_response_code(403);
+        exit("Access denied.");
+         }
+
+
+
         $title = trim($_POST['title']);
         $announcement = trim($_POST['message']);
 
@@ -94,15 +102,15 @@
         <?php 
           if(mysqli_num_rows($announcement_result)>0){
             while ($row = mysqli_fetch_assoc($announcement_result)) { ?>
-                <h3><?php echo $row['title']; ?></h3>
+                <h3><?php echo htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
 
-                <p><?php echo $row['message']?></p>
+                <p><?php echo nl2br(htmlspecialchars($row['message'], ENT_QUOTES, 'UTF-8')); ?></p>
 
                 <small>
                     Posted by:
-                    <?php echo $row['full_name']; ?>
-                    <?php echo $row['created_at']; ?>
-                </small>
+                    <?php echo htmlspecialchars($row['full_name'], ENT_QUOTES, 'UTF-8'); ?>
+                    <?php echo htmlspecialchars($row['created_at'], ENT_QUOTES, 'UTF-8'); ?>
+                </small>        
                 <hr>
         <?php
             }
