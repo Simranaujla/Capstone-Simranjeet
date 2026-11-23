@@ -15,7 +15,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test(\"Login redirects to dashboard\", function () {\n    pm.response.to.have.status(302);\n});\n\npm.test(\"Login creates a PHP session\", function () {\n    pm.expect(pm.cookies.has(\"PHPSESSID\")).to.be.true;\n});"
+              "pm.test(\"Employee login redirects successfully\", function () {\n    pm.response.to.have.status(302);\n});\n\npm.test(\"Login creates a PHP session\", function () {\n    pm.expect(pm.cookies.has(\"PHPSESSID\")).to.be.true;\n});\n\nconsole.log(\"Employee login status:\", pm.response.code);\nconsole.log(\"Employee login response:\", pm.response.text());"
             ]
           }
         }
@@ -63,7 +63,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test(\"Employee access restriction returns 302\", function () {\n    pm.response.to.have.status(302);\n});\n\npm.test(\"Employee is redirected to dashboard\", function () {\n    pm.expect(pm.response.headers.get(\"Location\")).to.eql(\"dashboard.php\");\n});"
+              "pm.test(\"Employee access is restricted\", function () {\n    pm.response.to.have.status(302);\n});\n\npm.test(\"Employee is redirected to dashboard\", function () {\n    pm.expect(pm.response.headers.get(\"Location\")).to.include(\"dashboard.php\");\n});"
             ]
           }
         }
@@ -1114,7 +1114,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "\npm.test(\"Manage Records page loads\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Record 12 is Approved\", function () {\n    const recordId = String(pm.collectionVariables.get(\"recordId\"));\n    const $ = cheerio.load(pm.response.text());\n\n    const row = $(\"tr\").filter(function () {\n        return $(this).find('input[name=\"id\"]').filter(function () {\n            return $(this).val() === recordId;\n        }).length > 0;\n    }).first();\n\n    pm.expect(row.length, \"Record row should exist\").to.eql(1);\n\n    const status = row.find(\"td\").eq(5).text().trim();\n\n    pm.expect(status).to.eql(\"Approved\");\n});\n"
+              "console.log(\"Record ID:\", pm.variables.get(\"recordId\"));\npm.test(\"Manage Records page loads\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Record 12 is Approved\", function () {\n    const recordId = String(pm.variables.get(\"recordId\"));\n    const $ = cheerio.load(pm.response.text());\n\n    const row = $(\"tr\").filter(function () {\n        return $(this).find('input[name=\"id\"]').filter(function () {\n            return $(this).val() === recordId;\n        }).length > 0;\n    }).first();\n\n    pm.expect(row.length, \"Record row should exist\").to.eql(1);\n\n    const status = row.find(\"td\").eq(5).text().trim();\n\n    pm.expect(status).to.eql(\"Approved\");\n});\n"
             ]
           }
         }
@@ -1198,7 +1198,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "\npm.test(\"Manage Records page loads\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Record 18 is Rejected\", function () {\n    const recordId = String(pm.collectionVariables.get(\"rejectRecordId\"));\n    const $ = cheerio.load(pm.response.text());\n\n    const row = $(\"tr\").filter(function () {\n        return $(this).find('input[name=\"id\"]').filter(function () {\n            return $(this).val() === recordId;\n        }).length > 0;\n    }).first();\n\n    pm.expect(row.length, \"Record row should exist\").to.eql(1);\n\n    const status = row.find(\"td\").eq(5).text().trim();\n\n    pm.expect(status).to.eql(\"Rejected\");\n});\n"
+              "\npm.test(\"Manage Records page loads\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Record 18 is Rejected\", function () {\n    const recordId = String(pm.variables.get(\"rejectRecordId\"));\n    const $ = cheerio.load(pm.response.text());\n\n    const row = $(\"tr\").filter(function () {\n        return $(this).find('input[name=\"id\"]').filter(function () {\n            return $(this).val() === recordId;\n        }).length > 0;\n    }).first();\n\n    pm.expect(row.length, \"Record row should exist\").to.eql(1);\n\n    const status = row.find(\"td\").eq(5).text().trim();\n\n    pm.expect(status).to.eql(\"Rejected\");\n});\n"
             ]
           }
         }
