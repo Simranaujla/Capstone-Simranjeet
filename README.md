@@ -193,3 +193,36 @@ Core employee and employer functionality implemented, with PHPUnit, Cypress, Pos
 # Deployment: In Progress
 
 The application is live on Render. Employee functionality has been verified, and further deployment testing is planned for employer functionality and other features
+
+
+
+
+
+# Milestone 3 - Implementation and Testing
+
+# Completed Features
+Employers can create and post announcements.
+Employees can view announcements.
+Announcements creation is restircted to employers
+Announcement fields are validated before submission
+Emplooyers can search work records by employee name.
+Work records can be filterred by date range.
+Worok records can be sorted by date and total hours in ascending or descending.
+
+# Automated Testing results
+
+# Testing tools
+Postman/Newman
+PHPUnit
+Cypress Announcement Tests
+
+# PHPUnit Testing
+The PHPUnit tests check databse connectivity, login functionality, time tracking, announcements storage and record sorting
+
+# Cypress Testing
+The announcement tests verify that employers can post announcements, empty fields are rejected and employees can view announcements without having access to the creation form.
+
+# Testing notes
+PHPUnit tests were executed using PHP. Test account credentials are stored locally in the Cypress environment configuration file and are excluded from verison control.
+
+The employee announcement viewing test uses the announcement created during the employer test. The announcement storage and sorting tests interact with the MySQL database.
